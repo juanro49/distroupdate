@@ -8,4 +8,4 @@ if len(sys.argv) != 3:
 
 codename = sys.argv[1]
 window_id = sys.argv[2]
-subprocess.run(["/usr/lib/linuxmint/mintUpdate/rel_upgrade_root.py", codename, window_id])
+subprocess.run(["/usr/lib/distroUpdate/rel_upgrade_root.py", codename, window_id])

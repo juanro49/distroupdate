@@ -4,14 +4,14 @@ import os
 import subprocess
 import time
 
-optionsfile = "/etc/mintupdate-automatic-upgrades.conf"
-logfile = "/var/log/mintupdate.log"
+optionsfile = "/etc/distroupdate-automatic-upgrades.conf"
+logfile = "/var/log/distroupdate.log"
 log = open(logfile, "a")
 log.write("\n-- Automatic Upgrade starting %s:\n" % time.strftime('%a %d %b %Y %H:%M:%S %Z'))
 log.flush()
 
-pkla_source = "/usr/share/linuxmint/mintupdate/automation/99-mintupdate-temporary.pkla"
-pkla_target = "/etc/polkit-1/localauthority/90-mandatory.d/99-mintupdate-temporary.pkla"
+pkla_source = "/usr/share/distroupdate/automation/99-distroupdate-temporary.pkla"
+pkla_target = "/etc/polkit-1/localauthority/90-mandatory.d/99-distroupdate-temporary.pkla"
 try:
     # Put shutdown and reboot blocker into place
     os.symlink(pkla_source, pkla_target)
@@ -28,10 +28,10 @@ try:
                 if line and not line.startswith("#"):
                     arguments.append(line)
 
-    # Run mintupdate-cli through systemd-inhibit
+    # Run distroupdate-cli through systemd-inhibit
     cmd = ["/bin/systemd-inhibit", '--why="Performing automatic updates"',
            '--who="Update Manager"',  "--what=shutdown", "--mode=block",
-           "/usr/bin/mintupdate-cli", "upgrade", "--refresh-cache", "--yes"]
+           "/usr/bin/distroupdate-cli", "upgrade", "--refresh-cache", "--yes"]
     cmd.extend(arguments)
     subprocess.run(cmd, stdout=log, stderr=log)
 

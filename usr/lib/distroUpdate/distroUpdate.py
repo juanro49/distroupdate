@@ -31,16 +31,16 @@ from Classes import Update, PRIORITY_UPDATES
 from xapp.GSettingsWidgets import *
 
 # import AUTOMATIONS dict
-with open("/usr/share/linuxmint/mintupdate/automation/index.json") as f:
+with open("/usr/share/distroupdate/automation/index.json") as f:
     AUTOMATIONS = json.load(f)
 
 try:
-    os.system("killall -q mintUpdate")
+    os.system("killall -q distroUpdate")
 except Exception as e:
     print (e)
     print(sys.exc_info()[0])
 
-setproctitle.setproctitle("mintUpdate")
+setproctitle.setproctitle("distroUpdate")
 
 # i18n
 gettext.install("mintupdate", "/usr/share/locale", names="ngettext")
@@ -445,8 +445,8 @@ class InstallThread(threading.Thread):
                 proceed = True
                 try:
                     pkgs = ' '.join(str(pkg) for pkg in packages)
-                    warnings = subprocess.check_output("/usr/lib/linuxmint/mintUpdate/checkWarnings.py %s" % pkgs, shell = True).decode("utf-8")
-                    #print ("/usr/lib/linuxmint/mintUpdate/checkWarnings.py %s" % pkgs)
+                    warnings = subprocess.check_output("/usr/lib/distroUpdate/checkWarnings.py %s" % pkgs, shell = True).decode("utf-8")
+                    #print ("/usr/lib/distroUpdate/checkWarnings.py %s" % pkgs)
                     warnings = warnings.split("###")
                     if len(warnings) == 2:
                         installations = warnings[0].split()
@@ -458,7 +458,7 @@ class InstallThread(threading.Thread):
                                 dialog.set_title("")
                                 dialog.set_markup("<b>" + _("This upgrade will trigger additional changes") + "</b>")
                                 #dialog.format_secondary_markup("<i>" + _("All available upgrades for this package will be ignored.") + "</i>")
-                                dialog.set_icon_name("mintupdate")
+                                dialog.set_icon_name("distroupdate")
                                 dialog.set_default_size(320, 400)
                                 dialog.set_resizable(True)
 
@@ -537,7 +537,7 @@ class InstallThread(threading.Thread):
 
                 if proceed:
                     Gdk.threads_enter()
-                    self.application.set_status(_("Installing updates"), _("Installing updates"), "mintupdate-installing", True)
+                    self.application.set_status(_("Installing updates"), _("Installing updates"), "distroupdate-installing", True)
                     Gdk.threads_leave()
                     self.application.logger.write("Ready to launch synaptic")
                     f = tempfile.NamedTemporaryFile()
@@ -551,13 +551,13 @@ class InstallThread(threading.Thread):
                         f.write(pkg_line.encode("utf-8"))
                     f.flush()
 
-                    subprocess.run(["sudo","/usr/lib/linuxmint/mintUpdate/synaptic-workaround.py","enable"])
+                    subprocess.run(["sudo","/usr/lib/distroUpdate/synaptic-workaround.py","enable"])
                     try:
                         result = subprocess.run(cmd, stdout=self.application.logger.log, stderr=self.application.logger.log, check=True)
                         returnCode = result.returncode
                     except subprocess.CalledProcessError as e:
                         returnCode = e.returncode
-                    subprocess.run(["sudo","/usr/lib/linuxmint/mintUpdate/synaptic-workaround.py","disable"])
+                    subprocess.run(["sudo","/usr/lib/distroUpdate/synaptic-workaround.py","disable"])
                     self.application.logger.write("Return code:" + str(returnCode))
                     f.close()
 
@@ -588,23 +588,23 @@ class InstallThread(threading.Thread):
 
                         if [pkg for pkg in PRIORITY_UPDATES if pkg in packages]:
                             # Restart
-                            self.application.logger.write("Mintupdate was updated, restarting it...")
+                            self.application.logger.write("Distroupdate was updated, restarting it...")
                             self.application.logger.close()
-                            os.system("/usr/lib/linuxmint/mintUpdate/mintUpdate.py show &")
+                            os.system("/usr/lib/distroUpdate/distroUpdate.py show &")
                             return
 
                         # Refresh
                         self.application.refresh()
                     else:
                         Gdk.threads_enter()
-                        self.application.set_status(_("Could not install the security updates"), _("Could not install the security updates"), "mintupdate-error", True)
+                        self.application.set_status(_("Could not install the security updates"), _("Could not install the security updates"), "distroupdate-error", True)
                         Gdk.threads_leave()
 
         except Exception as e:
             print (e)
             self.application.logger.write_error("Exception occurred in the install thread: " + str(sys.exc_info()[0]))
             Gdk.threads_enter()
-            self.application.set_status(_("Could not install the security updates"), _("Could not install the security updates"), "mintupdate-error", True)
+            self.application.set_status(_("Could not install the security updates"), _("Could not install the security updates"), "distroupdate-error", True)
             self.application.logger.write_error("Could not install security updates")
             Gdk.threads_leave()
 
@@ -679,7 +679,7 @@ class RefreshThread(threading.Thread):
             self.application.menubar.set_sensitive(False)
 
             # Starts the blinking
-            self.application.set_status("", _("Checking for updates"), "mintupdate-checking", not self.application.settings.get_boolean("hide-systray"))
+            self.application.set_status("", _("Checking for updates"), "distroupdate-checking", not self.application.settings.get_boolean("hide-systray"))
             Gdk.threads_leave()
 
             model = Gtk.TreeStore(bool, str, str, str, str, int, str, str, str, str, str, object)
@@ -697,7 +697,7 @@ class RefreshThread(threading.Thread):
                 subprocess.run(refresh_command)
                 self.application.settings.set_int("refresh-last-run", int(time.time()))
 
-            output = subprocess.run("/usr/lib/linuxmint/mintUpdate/checkAPT.py",
+            output = subprocess.run("/usr/lib/distroUpdate/checkAPT.py",
                                     stdout=subprocess.PIPE).stdout.decode("utf-8")
 
             # Return on error
@@ -711,7 +711,7 @@ class RefreshThread(threading.Thread):
                 Gdk.threads_enter()
                 self.application.set_status(_("Could not refresh the list of updates"),
                     "%s%s%s" % (_("Could not refresh the list of updates"), "\n\n" if error_msg else "", error_msg),
-                    "mintupdate-error", True)
+                    "distroupdate-error", True)
                 self.application.logger.write_error("Error in checkAPT.py, could not refresh the list of updates")
                 self.application.stack.set_visible_child_name("status_error")
                 self.application.builder.get_object("label_error_details").set_text(error_msg)
@@ -795,7 +795,7 @@ class RefreshThread(threading.Thread):
                     model.set_value(iter, UPDATE_SOURCE, "%s / %s" % (origin, update.archive))
                     model.set_value(iter, UPDATE_SIZE, update.size)
                     model.set_value(iter, UPDATE_SIZE_STR, size_to_string(update.size))
-                    model.set_value(iter, UPDATE_TYPE_PIX, "mintupdate-type-%s-symbolic" % update.type)
+                    model.set_value(iter, UPDATE_TYPE_PIX, "distroupdate-type-%s-symbolic" % update.type)
                     model.set_value(iter, UPDATE_TYPE, update.type)
                     model.set_value(iter, UPDATE_TOOLTIP, tooltip)
                     model.set_value(iter, UPDATE_SORT_STR, "%s%s" % (str(type_sort_key), update.display_name))
@@ -815,7 +815,7 @@ class RefreshThread(threading.Thread):
                                                 "%(selected)d updates selected (%(size)s)", num_checked) % \
                                                 {'selected':num_checked, 'size':size_to_string(download_size)}
 
-                    self.application.set_status(statusString, statusString, "mintupdate-updates-available", True)
+                    self.application.set_status(statusString, statusString, "distroupdate-updates-available", True)
                     self.application.logger.write("Found " + str(num_visible) + " software updates")
 
                     systrayString = ngettext("%d update available",
@@ -833,7 +833,7 @@ class RefreshThread(threading.Thread):
                 self.application.builder.get_object("label_success").set_text(NO_UPDATES_MSG)
                 self.application.builder.get_object("image_success_status").set_from_icon_name("object-select-symbolic", 96)
                 self.application.stack.set_visible_child_name("status_updated")
-                self.application.set_status("", NO_UPDATES_MSG, "mintupdate-up-to-date",
+                self.application.set_status("", NO_UPDATES_MSG, "distroupdate-up-to-date",
                                             not self.application.settings.get_boolean("hide-systray"))
                 self.application.logger.write("System is up to date")
                 Gdk.threads_leave()
@@ -851,7 +851,7 @@ class RefreshThread(threading.Thread):
             self.application.logger.write_error("Exception occurred in the refresh thread: %s" % str(sys.exc_info()[0]))
             Gdk.threads_enter()
             self.application.set_status(_("Could not refresh the list of updates"),
-                                        _("Could not refresh the list of updates"), "mintupdate-error", True)
+                                        _("Could not refresh the list of updates"), "distroupdate-error", True)
             Gdk.threads_leave()
 
         finally:
@@ -975,7 +975,7 @@ class RefreshThread(threading.Thread):
 class Logger():
 
     def __init__(self):
-        self.logdir = os.path.join(tempfile.gettempdir(), "mintUpdate/")
+        self.logdir = os.path.join(tempfile.gettempdir(), "distroUpdate/")
         self._create_log()
         self.hook = None
 
@@ -1031,7 +1031,7 @@ class AppIndicatorIcon():
 
     def __init__(self, app):
         self.app = app
-        self.icon = AppIndicator.Indicator.new("mintUpdate", "mintupdate", AppIndicator.IndicatorCategory.APPLICATION_STATUS)
+        self.icon = AppIndicator.Indicator.new("distroUpdate", "distroupdate", AppIndicator.IndicatorCategory.APPLICATION_STATUS)
         self.icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)
         self.icon.set_title(_("Update Manager"))
 
@@ -1080,7 +1080,7 @@ class XAppStatusIcon():
     def set_visible(self, visible):
         self.icon.set_visible(visible)
 
-class MintUpdate():
+class DistroUpdate():
 
     def __init__(self):
         Gdk.threads_init()
@@ -1095,12 +1095,12 @@ class MintUpdate():
         self.settings = Gio.Settings("com.linuxmint.updates")
 
         #Set the Glade file
-        gladefile = "/usr/share/linuxmint/mintupdate/main.ui"
+        gladefile = "/usr/share/distroupdate/main.ui"
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain("mintupdate")
         self.builder.add_from_file(gladefile)
         self.statusbar = self.builder.get_object("statusbar")
-        self.context_id = self.statusbar.get_context_id("mintUpdate")
+        self.context_id = self.statusbar.get_context_id("distroUpdate")
         self.window = self.builder.get_object("main_window")
         self.window.connect("key-press-event",self.on_key_press_event)
         self.treeview = self.builder.get_object("treeview_update")
@@ -1112,7 +1112,7 @@ class MintUpdate():
         try:
             self.window.set_title(_("Update Manager"))
 
-            self.window.set_icon_name("mintupdate")
+            self.window.set_icon_name("distroupdate")
 
             accel_group = Gtk.AccelGroup()
             self.window.add_accel_group(accel_group)
@@ -1256,7 +1256,7 @@ class MintUpdate():
                 self.statusIcon = XAppStatusIcon(menu)
                 self.statusIcon.icon.connect('activate', self.on_statusicon_activated)
 
-            self.set_status("", _("Checking for updates"), "mintupdate-checking", not self.settings.get_boolean("hide-systray"))
+            self.set_status("", _("Checking for updates"), "distroupdate-checking", not self.settings.get_boolean("hide-systray"))
 
             # Main window menu
             fileMenu = Gtk.MenuItem.new_with_mnemonic(_("_File"))
@@ -1317,7 +1317,7 @@ class MintUpdate():
                 if rel_edition.lower() in config['general']['editions']:
                     rel_target = config['general']['target_name']
                     relUpgradeMenuItem = Gtk.ImageMenuItem()
-                    relUpgradeMenuItem.set_image(Gtk.Image.new_from_icon_name("mintupdate-type-package-symbolic", Gtk.IconSize.MENU))
+                    relUpgradeMenuItem.set_image(Gtk.Image.new_from_icon_name("distroupdate-type-package-symbolic", Gtk.IconSize.MENU))
                     relUpgradeMenuItem.set_label(_("Upgrade to %s") % rel_target)
                     relUpgradeMenuItem.connect("activate", self.open_rel_upgrade)
                     editSubmenu.append(relUpgradeMenuItem)
@@ -1500,7 +1500,7 @@ class MintUpdate():
     def dpkg_locked():
         """ Returns True if a process has a handle on /var/lib/dpkg/lock (no check for write lock) """
         try:
-            subprocess.run(["sudo", "/usr/lib/linuxmint/mintUpdate/dpkg_lock_check.sh"],
+            subprocess.run(["sudo", "/usr/lib/distroUpdate/dpkg_lock_check.sh"],
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
             return True
         except subprocess.CalledProcessError:
@@ -1655,7 +1655,7 @@ class MintUpdate():
     def show_welcome_page(self, widget=None):
         self.updates_inhibited = True
         self.stack.set_visible_child_name("welcome")
-        self.set_status(_("Welcome to the Update Manager"), _("Welcome to the Update Manager"), "mintupdate-updates-available", True)
+        self.set_status(_("Welcome to the Update Manager"), _("Welcome to the Update Manager"), "distroupdate-updates-available", True)
         self.set_status_message("")
         self.toolbar.set_sensitive(False)
         self.menubar.set_sensitive(False)
@@ -1761,7 +1761,7 @@ class MintUpdate():
             else:
                 # When there is more than one monitor, either gtk or
                 # window managers (I've seen this in cinnamon, mate, xfce)
-                # get confused if the mintupdate window is topmost on one
+                # get confused if the distroupdate window is topmost on one
                 # monitor, but the current focus is actually a window in
                 # another monitor.  Focusing makes sure this window will
                 # become 'active' for purposes of the hiding code above.
@@ -1799,13 +1799,13 @@ class MintUpdate():
             window.destroy()
         def update_log(line):
             textbuffer.insert(textbuffer.get_end_iter(), line)
-        gladefile = "/usr/share/linuxmint/mintupdate/information.ui"
+        gladefile = "/usr/share/distroupdate/information.ui"
         builder = Gtk.Builder()
         builder.set_translation_domain("mintupdate")
         builder.add_from_file(gladefile)
         window = builder.get_object("main_window")
         window.set_title(_("Information"))
-        window.set_icon_name("mintupdate")
+        window.set_icon_name("distrooupdate")
         textbuffer = builder.get_object("log_textview").get_buffer()
         window.connect("destroy", destroy_window)
         builder.get_object("close_button").connect("clicked", destroy_window)
@@ -1820,12 +1820,12 @@ class MintUpdate():
     def open_history(self, widget):
         if self.history_window_showing:
             return
-        gladefile = "/usr/share/linuxmint/mintupdate/history.ui"
+        gladefile = "/usr/share/distroupdate/history.ui"
         builder = Gtk.Builder()
         builder.set_translation_domain("mintupdate")
         builder.add_from_file(gladefile)
         window = builder.get_object("main_window")
-        window.set_icon_name("mintupdate")
+        window.set_icon_name("distroupdate")
         window.set_title(_("History of Updates"))
 
         treeview = builder.get_object("treeview_history")
@@ -1895,7 +1895,7 @@ class MintUpdate():
         dlg = Gtk.AboutDialog()
         dlg.set_transient_for(self.window)
         dlg.set_title(_("About"))
-        dlg.set_program_name("mintUpdate for not LinuxMint distros")
+        dlg.set_program_name("distroUpdate")
         dlg.set_comments(_("Update Manager"))
         try:
             h = open('/usr/share/common-licenses/GPL', encoding="utf-8")
@@ -1910,9 +1910,9 @@ class MintUpdate():
             print(sys.exc_info()[0])
 
         dlg.set_version("__DEB_VERSION__")
-        dlg.set_icon_name("mintupdate")
-        dlg.set_logo_icon_name("mintupdate")
-        dlg.set_website("https://github.com/juanro49/mintupdate")
+        dlg.set_icon_name("distroupdate")
+        dlg.set_logo_icon_name("distroupdate")
+        dlg.set_website("https://github.com/juanro49/distroupdate")
         def close(w, res):
             if res == Gtk.ResponseType.CANCEL or res == Gtk.ResponseType.DELETE_EVENT:
                 w.destroy()
@@ -1926,7 +1926,7 @@ class MintUpdate():
         subprocess.Popen(["pkexec", "timeshift-gtk"])
 
     def open_shortcuts(self, widget):
-        gladefile = "/usr/share/linuxmint/mintupdate/shortcuts.ui"
+        gladefile = "/usr/share/distroupdate/shortcuts.ui"
         builder = Gtk.Builder()
         builder.set_translation_domain("mintupdate")
         builder.add_from_file(gladefile)
@@ -1946,13 +1946,13 @@ class MintUpdate():
             return
         self.preferences_window_showing = True
         self.window.set_sensitive(False)
-        gladefile = "/usr/share/linuxmint/mintupdate/preferences.ui"
+        gladefile = "/usr/share/distroupdate/preferences.ui"
         builder = Gtk.Builder()
         builder.set_translation_domain("mintupdate")
         builder.add_from_file(gladefile)
         window = builder.get_object("main_window")
         window.set_title(_("Preferences"))
-        window.set_icon_name("mintupdate")
+        window.set_icon_name("distroupdate")
         window.connect("destroy", self.close_preferences, window)
 
         switch_container = builder.get_object("switch_container")
@@ -2076,7 +2076,7 @@ class MintUpdate():
         autoupgrade_switch.content_widget.set_active(os.path.isfile(AUTOMATIONS["upgrade"][0]))
         autoupgrade_switch.content_widget.connect("notify::active", self.set_auto_upgrade)
         section.add_row(autoupgrade_switch)
-        button = Gtk.Button(_("Export blacklist to /etc/mintupdate.blacklist"))
+        button = Gtk.Button(_("Export blacklist to /etc/distroupdate.blacklist"))
         button.set_margin_start(20)
         button.set_margin_end(20)
         button.set_border_width(5)
@@ -2093,11 +2093,11 @@ class MintUpdate():
         window.show_all()
 
     def export_blacklist(self, widget):
-        filename = os.path.join(tempfile.gettempdir(), "mintUpdate/blacklist")
+        filename = os.path.join(tempfile.gettempdir(), "distroUpdate/blacklist")
         blacklist = self.settings.get_strv("blacklisted-packages")
         with open(filename, "w") as f:
             f.write("\n".join(blacklist) + "\n")
-        subprocess.run(["pkexec", "/usr/bin/mintupdate-automation", "blacklist", "enable"])
+        subprocess.run(["pkexec", "/usr/bin/distroupdate-automation", "blacklist", "enable"])
 
     def auto_refresh_toggled(self, widget, param):
         self.refresh_schedule_enabled = widget.get_active()
@@ -2113,7 +2113,7 @@ class MintUpdate():
         elif not widget.get_active() and exists:
             action = "disable"
         if action:
-            subprocess.run(["pkexec", "/usr/bin/mintupdate-automation", "upgrade", action])
+            subprocess.run(["pkexec", "/usr/bin/distroupdate-automation", "upgrade", action])
         if widget.get_active() != os.path.isfile(AUTOMATIONS["upgrade"][0]):
             widget.set_active(not widget.get_active())
 
@@ -2125,7 +2125,7 @@ class MintUpdate():
         elif not widget.get_active() and exists:
             action = "disable"
         if action:
-            subprocess.run(["pkexec", "/usr/bin/mintupdate-automation", "autoremove", action])
+            subprocess.run(["pkexec", "/usr/bin/distroupdate-automation", "autoremove", action])
         if widget.get_active() != os.path.isfile(AUTOMATIONS["autoremove"][0]):
             widget.set_active(not widget.get_active())
 
@@ -2143,7 +2143,7 @@ class MintUpdate():
         dialog = Gtk.MessageDialog(window, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.QUESTION, Gtk.ButtonsType.OK, None)
         dialog.set_markup(_("Please specify the source package name of the update to ignore (wildcards are supported) and optionally the version:"))
         dialog.set_title(_("Ignore an Update"))
-        dialog.set_icon_name("mintupdate")
+        dialog.set_icon_name("distroupdate")
         grid = Gtk.Grid()
         grid.set_column_spacing(5)
         grid.set_row_spacing(5)
@@ -2191,4 +2191,4 @@ class MintUpdate():
         kernel_window = KernelWindow(self)
 
 if __name__ == "__main__":
-    MintUpdate()
+    DistroUpdate()

@@ -28,7 +28,7 @@ class RefreshKernelsThread(threading.Thread):
         self.application = application
 
     def run(self):
-        kernels = subprocess.run(["/usr/lib/linuxmint/mintUpdate/checkKernels.py", CONFIGURED_KERNEL_TYPE],
+        kernels = subprocess.run(["/usr/lib/distroUpdate/checkKernels.py", CONFIGURED_KERNEL_TYPE],
             stdout=subprocess.PIPE).stdout.decode()
         self.application.build_kernels_list(kernels)
         self.application.refresh_kernels_list_done()
@@ -109,9 +109,9 @@ class InstallKernelThread(threading.Thread):
             f.flush()
 
         if do_regular:
-            subprocess.run(["sudo","/usr/lib/linuxmint/mintUpdate/synaptic-workaround.py","enable"])
+            subprocess.run(["sudo","/usr/lib/distroUpdate/synaptic-workaround.py","enable"])
             subprocess.run(cmd, stdout=self.application.logger.log, stderr=self.application.logger.log)
-            subprocess.run(["sudo","/usr/lib/linuxmint/mintUpdate/synaptic-workaround.py","disable"])
+            subprocess.run(["sudo","/usr/lib/distroUpdate/synaptic-workaround.py","disable"])
             f.close()
         self.application.refresh()
         self.cache = None
@@ -291,7 +291,7 @@ class KernelWindow():
     def __init__(self, application):
         self.application = application
         self.application.window.set_sensitive(False)
-        gladefile = "/usr/share/linuxmint/mintupdate/kernels.ui"
+        gladefile = "/usr/share/distroupdate/kernels.ui"
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain("mintupdate")
         self.builder.add_from_file(gladefile)

@@ -2,7 +2,7 @@
 
 import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + '/../usr/lib/linuxmint/mintUpdate/')
+sys.path.insert(0, myPath + '/../usr/lib/distroUpdate/')
 
 from datetime import datetime
 from Classes import *

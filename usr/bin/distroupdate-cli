@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/lib/distroUpdate/distroupdate-cli.py $@
+

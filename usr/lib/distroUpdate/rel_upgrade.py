@@ -33,10 +33,10 @@ class Assistant:
         page = self.assistant.append_page(self.vbox_intro)
         self.assistant.set_page_type(self.vbox_intro, Gtk.AssistantPageType.INTRO)
         self.assistant.set_page_title(self.vbox_intro, _("Introduction"))
-        self.assistant.set_icon_name("mintupdate-release-upgrade")
+        self.assistant.set_icon_name("distroupdate-release-upgrade")
 
         if not os.path.exists("/etc/linuxmint/info"):
-            self.show_message('/usr/lib/linuxmint/mintUpdate/rel_upgrades/failure.png', _("Your system is missing critical components. A package corresponding to your edition of Linux Mint should provide the virtual package 'mint-info' and the file /etc/linuxmint/info."))
+            self.show_message('/usr/lib/distroUpdate/rel_upgrades/failure.png', _("Your system is missing critical components. A package corresponding to your edition of Linux Mint should provide the virtual package 'mint-info' and the file /etc/linuxmint/info."))
         else:
             self.current_codename = 'unknown'
             self.current_edition = 'unknown'
@@ -49,7 +49,7 @@ class Assistant:
                         self.current_codename = line.split('=')[1].replace('"', '').split()[0]
             rel_path = "/usr/share/mint-upgrade-info/%s" % self.current_codename
             if not os.path.exists(rel_path):
-                self.show_message('/usr/lib/linuxmint/mintUpdate/rel_upgrades/info.png', _("No upgrades were found."))
+                self.show_message('/usr/lib/distroUpdate/rel_upgrades/info.png', _("No upgrades were found."))
             else:
                 config = configparser.ConfigParser()
                 config.read(os.path.join(rel_path, "info"))
@@ -68,7 +68,7 @@ class Assistant:
                     self.assistant.set_page_complete(self.vbox_intro, True)
                     self.build_assistant()
                 else:
-                    self.show_message('/usr/lib/linuxmint/mintUpdate/rel_upgrades/info.png', _("An upgrade was found but it is not available yet for the %s edition.") % self.current_edition)
+                    self.show_message('/usr/lib/distroUpdate/rel_upgrades/info.png', _("An upgrade was found but it is not available yet for the %s edition.") % self.current_edition)
 
         self.assistant.show_all()
 
@@ -80,7 +80,7 @@ class Assistant:
         self.assistant.set_page_title(self.vbox_rel_notes, _("Release notes"))
         self.assistant.set_page_type(self.vbox_rel_notes, Gtk.AssistantPageType.CONTENT)
         vbox_content = Gtk.HBox()
-        image = Gtk.Image.new_from_file('/usr/lib/linuxmint/mintUpdate/rel_upgrades/info.png')
+        image = Gtk.Image.new_from_file('/usr/lib/distroUpdate/rel_upgrades/info.png')
         vbox_content.pack_start(image, False, False, 0)
         label = Gtk.Label()
         label.set_line_wrap(True)
@@ -102,7 +102,7 @@ class Assistant:
         self.assistant.set_page_title(self.vbox_new_features, _("New features"))
         self.assistant.set_page_type(self.vbox_new_features, Gtk.AssistantPageType.CONTENT)
         vbox_content = Gtk.HBox()
-        image = Gtk.Image.new_from_file('/usr/lib/linuxmint/mintUpdate/rel_upgrades/features.png')
+        image = Gtk.Image.new_from_file('/usr/lib/distroUpdate/rel_upgrades/features.png')
         vbox_content.pack_start(image, False, False, 0)
         label = Gtk.Label()
         label.set_line_wrap(True)
@@ -127,7 +127,7 @@ class Assistant:
         self.vbox_meta = Gtk.VBox()
         meta = "mint-meta-%s" % self.current_edition.lower()
         vbox_content = Gtk.HBox()
-        image = Gtk.Image.new_from_file('/usr/lib/linuxmint/mintUpdate/rel_upgrades/failure.png')
+        image = Gtk.Image.new_from_file('/usr/lib/distroUpdate/rel_upgrades/failure.png')
         vbox_content.pack_start(image, False, False, 0)
         label = Gtk.Label()
         label.set_line_wrap(True)
@@ -150,7 +150,7 @@ class Assistant:
             self.vbox_meta.hide()
 
         vbox_content = Gtk.HBox()
-        image = Gtk.Image.new_from_file('/usr/lib/linuxmint/mintUpdate/rel_upgrades/risks.png')
+        image = Gtk.Image.new_from_file('/usr/lib/distroUpdate/rel_upgrades/risks.png')
         vbox_content.pack_start(image, False, False, 0)
         label = Gtk.Label()
         label.set_line_wrap(True)
@@ -261,7 +261,7 @@ class Assistant:
             message_text = _("The upgrade did not succeed. Make sure you are connected to the Internet and try to upgrade again.")
 
         vbox_content = Gtk.HBox()
-        image = Gtk.Image.new_from_file('/usr/lib/linuxmint/mintUpdate/rel_upgrades/%s.png' % image_result)
+        image = Gtk.Image.new_from_file('/usr/lib/distroUpdate/rel_upgrades/%s.png' % image_result)
         vbox_content.pack_start(image, False, False, 0)
         label = Gtk.Label()
         label.set_line_wrap(True)

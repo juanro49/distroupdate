@@ -8,7 +8,7 @@ from gi.repository import Gio
 
 # These updates take priority over other updates.
 # If a new version of these packages is available, nothing else is listed.
-PRIORITY_UPDATES = ['mintupdate', 'mint-upgrade-info']
+PRIORITY_UPDATES = ['distroupdate', 'mint-upgrade-info']
 
 settings = Gio.Settings("com.linuxmint.updates")
 

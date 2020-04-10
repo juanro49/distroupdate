@@ -1,10 +1,11 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: mintupdate
-Upstream-Contact: Clement Lefebvre <root@linuxmint.com>
-Source: https://github.com/linuxmint/mintupdate
+Upstream-Name: distroupdate
+Upstream-Contact: Juan Roberto García <juanro.aof@gmail.com>
+Source: https://github.com/juanro49/mintupdate
 
 Files: *
 Copyright: 2007-2015 Clement Lefebvre <root@linuxmint.com>
+				2020 Juanro <juanro.aof@gmail.com>
 License: GPL-3+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

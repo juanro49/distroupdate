@@ -15,7 +15,7 @@ if len(sys.argv) != 3 or sys.argv[1] not in ("upgrade", "autoremove", "blacklist
     sys.exit(1)
 
 # import AUTOMATIONS dict
-with open("/usr/share/linuxmint/mintupdate/automation/index.json") as f:
+with open("/usr/share/distroupdate/automation/index.json") as f:
     AUTOMATIONS = json.load(f)
 
 automation_id = sys.argv[1]
@@ -28,7 +28,7 @@ def do_enable(_automation_id):
             subprocess.run(["/bin/systemctl", "start", basename])
             subprocess.run(["/bin/systemctl", "enable", basename])
         else:
-            default = "/usr/share/linuxmint/mintupdate/automation/%s.default" % _automation_id
+            default = "/usr/share/distroupdate/automation/%s.default" % _automation_id
             os.system("cp %s %s" % (default, filename))
             print("%s %s created." % (name, filename))
             if sys.argv[1] == "blacklist":
@@ -48,7 +48,7 @@ def do_disable(_automation_id):
 def add_user_blacklist(outfile):
     import tempfile
     try:
-        infile = os.path.join(tempfile.gettempdir(), "mintUpdate/blacklist")
+        infile = os.path.join(tempfile.gettempdir(), "distroUpdate/blacklist")
         with open(infile, "r") as export:
             with open(outfile, "a") as f:
                 for line in export:
@@ -63,6 +63,6 @@ if sys.argv[2] == "enable":
     if automation_id == "upgrade":
         do_enable("blacklist")
     # Enable the cleanup service in case it was disabled manually
-    subprocess.run(["/bin/systemctl", "enable", "mintupdate-automation-cleanup.service"])
+    subprocess.run(["/bin/systemctl", "enable", "distroupdate-automation-cleanup.service"])
 else:
     do_disable(automation_id)

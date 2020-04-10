@@ -23,13 +23,13 @@ if __name__ == "__main__":
                 return True
         return False
 
-    parser = argparse.ArgumentParser(prog="mintupdate-cli")
+    parser = argparse.ArgumentParser(prog="distroupdate-cli")
     parser.add_argument("command", help="command to run (possible commands are: list, upgrade)")
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-k", "--only-kernel", action="store_true", help="only include kernel updates")
     group.add_argument("-s", "--only-security", action="store_true", help="only include security updates")
-    parser.add_argument("-i", "--ignore", help="list of updates to ignore (comma-separated list of source package names). Note: You can also blacklist updates by adding them to /etc/mintupdate.blacklist, one source package per line. To ignore a specific version, use the format package=version.")
+    parser.add_argument("-i", "--ignore", help="list of updates to ignore (comma-separated list of source package names). Note: You can also blacklist updates by adding them to /etc/distroupdate.blacklist, one source package per line. To ignore a specific version, use the format package=version.")
     parser.add_argument("-r", "--refresh-cache", action="store_true", help="refresh the APT cache")
     parser.add_argument("-d", "--dry-run", action="store_true", help="simulation mode, don't upgrade anything")
     parser.add_argument("-y", "--yes", action="store_true", help="automatically answer yes to all questions and always install new configuration files (unless you also use \"--keep-configuration\" option)")
@@ -45,8 +45,8 @@ if __name__ == "__main__":
         check.find_changes()
 
         blacklisted = []
-        if os.path.exists("/etc/mintupdate.blacklist"):
-            with open("/etc/mintupdate.blacklist") as blacklist_file:
+        if os.path.exists("/etc/distroupdate.blacklist"):
+            with open("/etc/distroupdate.blacklist") as blacklist_file:
                 for line in blacklist_file:
                     line = line.strip()
                     if line.startswith("#"):

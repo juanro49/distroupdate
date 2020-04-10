@@ -12,8 +12,8 @@ gettext.install(DOMAIN, PATH)
 
 prefix = "[Desktop Entry]\n"
 
-suffix = """Exec=mintupdate
-Icon=mintupdate
+suffix = """Exec=distroupdate
+Icon=distroupdate
 Terminal=false
 Type=Application
 Encoding=UTF-8
@@ -25,10 +25,10 @@ NotShowIn=KDE;
 name = _("Update Manager")
 comment = _("Show and install available updates")
 
-additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/mintupdate.desktop", prefix, "Update Manager", "Show and install available updates", suffix)
+additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/distroupdate.desktop", prefix, "Update Manager", "Show and install available updates", suffix)
 
-suffix = """Exec=mintupdate
-Icon=mintupdate
+suffix = """Exec=distroupdate
+Icon=distroupdate
 Terminal=false
 Type=Application
 Encoding=UTF-8
@@ -37,7 +37,7 @@ StartupNotify=false
 OnlyShowIn=KDE;
 """
 
-additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/mintupdate-kde.desktop", prefix, "Update Manager", "Show and install available updates", suffix, genericName="Show and install available updates")
+additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/distroupdate-kde.desktop", prefix, "Update Manager", "Show and install available updates", suffix, genericName="Show and install available updates")
 
 prefix= """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policyconfig PUBLIC
@@ -58,7 +58,7 @@ suffix = """
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/mintupdate-automation</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/distroupdate-automation</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">false</annotate>
   </action>
 </policyconfig>
@@ -78,6 +78,6 @@ os.chdir(cur_dir)
 for locale in locales:
     os.system("mkdir -p usr/share/help/%s/mintupdate/" % locale)
     os.system("msgunfmt /usr/share/locale/%s/LC_MESSAGES/mintupdate.mo > /tmp/%s.po" % (locale, locale))
-    for page in ["index", "kernels", "mintupdate-cli", "snapshots", "regressions", "updates"]:
+    for page in ["index", "kernels", "distropdate-cli", "snapshots", "regressions", "updates"]:
         os.system("xml2po -p /tmp/%(locale)s.po -o usr/share/help/%(locale)s/mintupdate/%(page)s.page usr/share/help/C/mintupdate/%(page)s.page" % {'locale': locale, 'page':page})
     os.system("cp usr/share/help/C/mintupdate/legal.xml usr/share/help/%s/mintupdate/" % locale)

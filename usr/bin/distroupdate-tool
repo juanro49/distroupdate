@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "distroupdate-tool is depecrated, please use distroupdate-cli instead."
+

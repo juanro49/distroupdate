@@ -28,7 +28,7 @@ class APTCheck():
 
     def load_aliases(self):
         self.aliases = {}
-        with open("/usr/lib/linuxmint/mintUpdate/aliases") as alias_file:
+        with open("/usr/lib/distroUpdate/aliases") as alias_file:
             for line in alias_file:
                 if not line.startswith('#'):
                     splitted = line.split("#####")

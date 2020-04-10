@@ -3,7 +3,7 @@ Description=Update Manager automatic upgrades
 
 [Service]
 Type=oneshot
-ExecStart=/usr/lib/linuxmint/mintUpdate/automatic_upgrades.py
+ExecStart=/usr/lib/distroUpdate/automatic_upgrades.py
 
 [Install]
 WantedBy=multi-user.target

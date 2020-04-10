@@ -1,0 +1,6 @@
+# Allow any user to check for new system updates without
+# requiring user authentication.
+
+ALL ALL = NOPASSWD:/usr/bin/mint-refresh-cache
+ALL ALL = NOPASSWD:/usr/lib/distroUpdate/synaptic-workaround.py
+ALL ALL = NOPASSWD:/usr/lib/distroUpdate/dpkg_lock_check.sh

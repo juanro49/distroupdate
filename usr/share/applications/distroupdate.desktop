@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Update Manager
+Name[es]=Administrador de actualizaciones
+Comment=Show and install available updates
+Comment[es]=Mostrar e instalar las actualizaciones disponibles
+Exec=distroupdate
+Icon=distroupdate
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Application;System;Settings;XFCE;X-XFCE-SettingsDialog;X-XFCE-SystemSettings;
+StartupNotify=false
+NotShowIn=KDE;
+Name[es_ES]=distroupdate

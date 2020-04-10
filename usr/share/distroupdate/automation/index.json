@@ -1,0 +1,6 @@
+{
+    "upgrade": ["/etc/systemd/system/timers.target.wants/distroupdate-automation-upgrade.timer", "systemd"],
+    "blacklist": ["/etc/distroupdate.blacklist", "Blacklist"],
+    "autoremove": ["/etc/systemd/system/timers.target.wants/distroupdate-automation-autoremove.timer", "systemd"],
+    "clean": ["/etc/apt/apt.conf.d/99_distroupdate_clean", "apt-daily config"]
+}
