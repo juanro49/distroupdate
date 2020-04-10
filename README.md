@@ -25,6 +25,9 @@ wget https://github.com/juanro49/distroupdate/releases/download/5.6.1/distroupda
 sudo dpkg -i distroupdate_5.6.1_all.deb
 ```
 
+#### Menciones
+- InstaTecno --> [DistroUpdate, herramienta gráfica para actualizar GNU/Linux fácilmente](https://instatecno.com/actualiza-gnu-linux-sin-comandos-distroupdate)
+
 ## Donaciones
 | Método | Dirección |
 | --- | --- |
