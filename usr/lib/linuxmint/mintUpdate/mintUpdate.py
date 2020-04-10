@@ -700,11 +700,6 @@ class RefreshThread(threading.Thread):
             output = subprocess.run("/usr/lib/linuxmint/mintUpdate/checkAPT.py",
                                     stdout=subprocess.PIPE).stdout.decode("utf-8")
 
-            # Check presence of Mint layer
-            if len(output) > 0 and not "CHECK_APT_ERROR" in output and not self.policy_check():
-                self.cleanup()
-                return False
-
             # Return on error
             if "CHECK_APT_ERROR" in output:
                 try:
@@ -865,47 +860,6 @@ class RefreshThread(threading.Thread):
     def run_status_checks(self):
         """ Runs various status checks and shows infobars where appropriate """
         self.mirror_check()
-
-    def check_policy(self):
-        """ Check the presence of the Mint layer """
-        p = subprocess.run(['apt-cache', 'policy'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, env={"LC_ALL": "C"})
-        output = p.stdout.decode()
-        if p.stderr:
-            error_msg = p.stderr.decode().strip()
-            self.application.logger.write_error("APT policy error:\n%s" % error_msg)
-        else:
-            error_msg = None
-        mint_layer_found = False
-        for line in output.split("\n"):
-            line = line.strip()
-            if line.startswith("700") and line.endswith("Packages") and "/upstream" in line:
-                mint_layer_found = True
-                break
-        return (mint_layer_found, error_msg)
-
-    def policy_check(self):
-        (mint_layer_found, error_msg) = self.check_policy()
-        if not mint_layer_found:
-            Gdk.threads_enter()
-            label1 = _("Your APT configuration is corrupt.")
-            label2 = _("Do not install or update anything, it could break your operating system!")
-            label3 = _("To switch to a different Linux Mint mirror and solve this problem, click OK.")
-            msg = _("Your APT configuration is corrupt.")
-            error_label = _("APT error:")
-            if error_msg:
-                error_msg = "\n\n%s\n%s" % (error_label, error_msg)
-            else:
-                error_label = ""
-            self.application.show_infobar(_("Please switch to another Linux Mint mirror"),
-                msg, Gtk.MessageType.ERROR,
-                callback=self._on_infobar_mintsources_response)
-            self.application.set_status(_("Could not refresh the list of updates"), "%s\n%s" % (label1, label2), "mintupdate-error", True)
-            self.application.logger.write_error("Error: The APT policy is incorrect!")
-            self.application.stack.set_visible_child_name("status_error")
-            self.application.builder.get_object("label_error_details").set_markup("<b>%s\n%s\n%s%s</b>" % (label1, label2, label3, error_msg))
-            self.application.builder.get_object("label_error_details").show()
-            Gdk.threads_leave()
-        return mint_layer_found
 
     def mirror_check(self):
         """ Mirror-related notifications """
@@ -1941,7 +1895,7 @@ class MintUpdate():
         dlg = Gtk.AboutDialog()
         dlg.set_transient_for(self.window)
         dlg.set_title(_("About"))
-        dlg.set_program_name("mintUpdate")
+        dlg.set_program_name("mintUpdate for not LinuxMint distros")
         dlg.set_comments(_("Update Manager"))
         try:
             h = open('/usr/share/common-licenses/GPL', encoding="utf-8")
@@ -1958,7 +1912,7 @@ class MintUpdate():
         dlg.set_version("__DEB_VERSION__")
         dlg.set_icon_name("mintupdate")
         dlg.set_logo_icon_name("mintupdate")
-        dlg.set_website("http://www.github.com/linuxmint/mintupdate")
+        dlg.set_website("https://github.com/juanro49/mintupdate")
         def close(w, res):
             if res == Gtk.ResponseType.CANCEL or res == Gtk.ResponseType.DELETE_EVENT:
                 w.destroy()
