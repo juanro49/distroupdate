@@ -24,3 +24,15 @@ sudo apt install distroupdate
 wget https://github.com/juanro49/distroupdate/releases/download/5.6.1/distroupdate_5.6.1_all.deb
 sudo dpkg -i distroupdate_5.6.1_all.deb
 ```
+
+## Donaciones
+| Método | Dirección |
+| --- | --- |
+| **Paypal** | https://www.paypal.me/juanro49 |
+| **Bitcoin** | 1QJfiEAxa1A4TbEgtbVMHPXPWXJXxEpUvi |
+| **Ethereum y tokens** | 0xb9d9958e73b44325082a2870830dca0d881490d2 |
+| **Stellar** | GCOHJZYRBOQYIV265UDAB75VU3O2RFQ3TWHFPER32MSOKZCCKRKVBWEH |
+| **Litecoin** | LYsyYEmxnRaCY3ML2tKYZpQA6zhndpuuQ4 |
+| **Dash** | XxhbofmRrJSm5t4Lp9zSjECbe2v9LVdZcK |
+| **MintUpdate** | https://www.linuxmint.com/donors.php |
+| **PatoJAD repo** | https://patojad.com.ar/repositorio/ |
