@@ -27,6 +27,7 @@ sudo dpkg -i distroupdate_5.6.1_all.deb
 
 #### Menciones
 - InstaTecno --> [DistroUpdate, herramienta gráfica para actualizar GNU/Linux fácilmente](https://instatecno.com/actualiza-gnu-linux-sin-comandos-distroupdate)
+- PatoJAD --> [Actualiza GNU/Linux sin comandos con DistroUpdate](https://patojad.com.ar/aplicaciones/2020/04/actualiza-gnu/linux-sin-comandos-con-distroupdate/)
 
 ## Donaciones
 | Método | Dirección |
