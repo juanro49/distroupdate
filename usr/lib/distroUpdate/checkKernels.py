@@ -57,12 +57,16 @@ try:
             versions = KernelVersion(pkg_version).version_id
 
             print(pkg_data.origins[0])
-            if not pkg_data.origins[0].origin:
-                origin = 0
-            elif pkg_data.origins[0].origin == "Ubuntu" or "Debian":
+            if pkg_data.origins[0].origin == "Ubuntu":
                 origin = 1
-            else:
+            elif pkg_data.origins[0].origin == "Debian":
                 origin = 2
+            elif pkg_data.origins[0].origin == "liquorix":
+                origin = 3
+            elif pkg_data.origins[0].site == "deb.xanmod.org" or pkg_data.origins[0].site == "apt.fury.io":
+                origin = 4
+            else:
+                origin = 0
 
             archive = pkg_data.origins[0].archive
 
@@ -84,6 +88,7 @@ try:
                         supported_tag = "%sy" % (distro_lifetime // 12)
                     else:
                         supported_tag = "%sm" % distro_lifetime
+
             if supported_tag:
                 if supported_tag.endswith("y"):
                     # override support duration for HWE kernels in LTS releases,

@@ -33,6 +33,9 @@ def get_release_dates():
         distro_info += open("/usr/share/distro-info/ubuntu.csv", "r").readlines()
     if os.path.isfile("/usr/share/distro-info/debian.csv"):
         distro_info += open("/usr/share/distro-info/debian.csv", "r").readlines()
+    if os.path.isfile("/usr/share/distro-info/deepin.csv"):
+        distro_info += open("/usr/share/distro-info/deepin.csv", "r").readlines()
+
     if distro_info:
         for distro in distro_info[1:]:
             try:

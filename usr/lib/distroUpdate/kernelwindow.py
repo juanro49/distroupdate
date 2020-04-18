@@ -5,6 +5,7 @@ import os
 import subprocess
 import tempfile
 import threading
+import re
 from datetime import datetime
 
 import gi
@@ -226,6 +227,56 @@ class KernelRow(Gtk.ListBoxRow):
             box.pack_start(link, False, False, 2)
             link = Gtk.Label()
             link.set_markup("<a href='https://people.canonical.com/~ubuntu-security/cve/pkg/linux.html'>CVE Tracker</a>")
+            link.set_line_wrap(True)
+            box.pack_start(link, False, False, 2)
+        elif origin == "2":
+            box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            box.set_margin_bottom(6)
+            hidden_box.pack_start(box, True, True, 0)
+            link = Gtk.Label()
+            link.set_markup("<a href='https://bugs.debian.org/linux-image-%s-amd64'>Bug reports</a>" % version)
+            link.set_line_wrap(True)
+            box.pack_start(link, False, False, 2)
+            link = Gtk.Label()
+            changelog_version = pkg_version
+            if "~" in pkg_version:
+                changelog_version = pkg_version.split("~")[0]
+            link.set_markup("<a href='https://metadata.ftp-master.debian.org/changelogs/main/l/linux/linux_%s_changelog'>Changelog</a>" % changelog_version)
+            link.set_line_wrap(True)
+            box.pack_start(link, False, False, 2)
+            link = Gtk.Label()
+            link.set_markup("<a href='https://security-tracker.debian.org/tracker/source-package/linux'>CVE Tracker</a>")
+            link.set_line_wrap(True)
+            box.pack_start(link, False, False, 2)
+        elif origin == "3":
+            box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            box.set_margin_bottom(6)
+            hidden_box.pack_start(box, True, True, 0)
+            link = Gtk.Label()
+            link.set_markup("<a href='https://github.com/damentz/liquorix-package/issues'>Bug reports</a>")
+            link.set_line_wrap(True)
+            box.pack_start(link, False, False, 2)
+            link = Gtk.Label()
+            changelog_version = pkg_version
+            if "~" in pkg_version:
+                changelog_version = re.sub(".[0-9]$", "", pkg_version.split("~")[0])
+            link.set_markup("<a href='https://github.com/damentz/liquorix-package/releases/tag/%s'>Changelog</a>" % changelog_version)
+            link.set_line_wrap(True)
+            box.pack_start(link, False, False, 2)
+        elif origin == "4":
+            box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            box.set_margin_bottom(6)
+            hidden_box.pack_start(box, True, True, 0)
+            link = Gtk.Label()
+            link.set_markup("<a href='https://forum.xanmod.org/forum-8.html'>Bug reports</a>")
+            link.set_line_wrap(True)
+            box.pack_start(link, False, False, 2)
+            link = Gtk.Label()
+            changelog_version = pkg_version
+            if "~" in pkg_version:
+                changelog_version = pkg_version.split("~")[0]
+                version = re.sub(".[0-9]$", "", version)
+            link.set_markup("<a href='https://dl.xanmod.org/changelog/%(v)s/Changes-%(cv)s'>Changelog</a>" % {'v': version, 'cv': changelog_version})
             link.set_line_wrap(True)
             box.pack_start(link, False, False, 2)
 
