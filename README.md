@@ -21,7 +21,7 @@ sudo apt install distroupdate
 
 ### Paquete deb
 ```
-wget https://github.com/juanro49/distroupdate/releases/download/5.6.1/distroupdate_5.6.1_all.deb
+wget https://github.com/juanro49/distroupdate/releases/download/5.6.2/distroupdate_5.6.2_all.deb
 sudo dpkg -i distroupdate_5.6.1_all.deb
 ```
 
