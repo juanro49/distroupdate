@@ -41,8 +41,8 @@ try:
                 pkg_version = pkg.installed.version
             else:
                 # only offer to install same-type kernels
-                if not kernel_type == CONFIGURED_KERNEL_TYPE:
-                    continue
+                #if not kernel_type == CONFIGURED_KERNEL_TYPE:
+                    #continue
                 if pkg.candidate and pkg.candidate.downloadable:
                     installable = 1
                     pkg_version = pkg.candidate.version
@@ -56,9 +56,10 @@ try:
             # provide a representation of the version which helps sorting the kernels
             versions = KernelVersion(pkg_version).version_id
 
+            print(pkg_data.origins[0])
             if not pkg_data.origins[0].origin:
                 origin = 0
-            elif pkg_data.origins[0].origin == 'Ubuntu':
+            elif pkg_data.origins[0].origin == "Ubuntu" or "Debian":
                 origin = 1
             else:
                 origin = 2
@@ -67,7 +68,7 @@ try:
 
             # get support duration
             supported_tag = pkg_data.record.get("Supported")
-            if not supported_tag and origin == 1 and not "-proposed" in pkg_data.origins[0].archive:
+            if not supported_tag:
                 # Workaround for Ubuntu releasing kernels by copying straight from
                 # -proposed and only adding the Supported tag shortly after.
                 # To avoid user confusion in the time in-between we just assume
@@ -95,10 +96,10 @@ try:
                     support_duration = int(supported_tag[:-1])
                 else:
                     # unexpected support tag
-                    support_duration = 0
+                    support_duration = 6
             else:
                 # unsupported
-                support_duration = 0
+                support_duration = 6
 
             resultString = "KERNEL###%s###%s###%s###%s###%s###%s###%s###%s###%s###%s" % \
                 (".".join(versions), version, pkg_version, installed, used, installable,

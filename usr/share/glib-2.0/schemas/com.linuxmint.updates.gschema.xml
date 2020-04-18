@@ -122,12 +122,12 @@
       <description></description>
     </key>
     <key type="b" name="allow-kernel-type-selection">
-      <default>false</default>
+      <default>true</default>
       <summary></summary>
       <description></description>
     </key>
     <key type="s" name="selected-kernel-type">
-      <default>"-generic"</default>
+      <default>"-amd64"</default>
       <summary></summary>
       <description></description>
     </key>

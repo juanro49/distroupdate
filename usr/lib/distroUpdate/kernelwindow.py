@@ -505,7 +505,7 @@ class KernelWindow():
             (version_id, version, pkg_version, kernel_type, page_label, label, installed, used, title, installable, origin, release, support_duration) = kernel
             support_status = ""
             newest_supported_in_series = False
-            if support_duration and origin == "1":
+            if support_duration:
                 if release in kernel_support_info.keys():
                     support_info = [x for x in kernel_support_info[release] if x[0] == page_label]
                 else:
