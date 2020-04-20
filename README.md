@@ -4,6 +4,8 @@
 GNU/Linux Update Manager para distribuciones basadas en Debian o Ubuntu basado en Linux Mint Update Manager ([mintupdate](https://github.com/linuxmint/mintupdate))
 
 <img src="https://i.imgur.com/ZlAOKKb.png"/>
+<img src="https://i.imgur.com/NtvjDau.png"/>
+
 
 ## Instalación
 
