@@ -1,3 +1,10 @@
+distroupdate (5.6.4) debian; urgency=medium
+
+  [ Juanro ]
+  * distroUpdate.py: Fix kernel manage windows view in all distros
+
+  -- Juanro <juanro.aof@gmail.com>  Mon, 20 Apr 2020 17:41:00 +2000
+
 distroupdate (5.6.3) debian; urgency=medium
 
   [ Juanro ]
