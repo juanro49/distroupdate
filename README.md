@@ -38,6 +38,7 @@ sudo dpkg -i distroupdate_5.6.1_all.deb
 | **Bitcoin** | 1QJfiEAxa1A4TbEgtbVMHPXPWXJXxEpUvi |
 | **Ethereum y tokens** | 0xb9d9958e73b44325082a2870830dca0d881490d2 |
 | **Stellar** | GCOHJZYRBOQYIV265UDAB75VU3O2RFQ3TWHFPER32MSOKZCCKRKVBWEH |
+| **GridCoin** | S6DXDzwMyu8bkgdExaFEFeV91DMBJyy1QB |
 | **Litecoin** | LYsyYEmxnRaCY3ML2tKYZpQA6zhndpuuQ4 |
 | **Dash** | XxhbofmRrJSm5t4Lp9zSjECbe2v9LVdZcK |
 | **MintUpdate** | https://www.linuxmint.com/donors.php |
